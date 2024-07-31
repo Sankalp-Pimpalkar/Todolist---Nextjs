@@ -32,12 +32,14 @@ function Home() {
       })
 
       setNewTodo('');
-      fetchTodos()
     };
+    fetchTodos()
   }
 
   async function fetchTodos() {
-    const response = await fetch('/api/get-todos', { cache: 'no-store' })
+    const response = await fetch('/api/get-todos', {
+      method: 'GET'
+    })
     const data = await response.json()
     console.log(data)
     setTodos(data.data)
@@ -69,8 +71,8 @@ function Home() {
         cache: 'no-store'
       })
 
-      fetchTodos()
     }
+    fetchTodos()
   }
 
   async function updateTask(todo_id: string, task: string) {
@@ -84,8 +86,8 @@ function Home() {
         cache: 'no-store'
       })
 
-      fetchTodos()
     }
+    fetchTodos()
   }
 
   useEffect(() => {
