@@ -1,13 +1,14 @@
 import dbconnect from "@/db/dbconnect";
 import Todo from "@/models/Todo";
+import { NextApiResponse } from "next";
 
 export async function GET(
-    req: Request
+    req: Request,
+    res: NextApiResponse
 ) {
     await dbconnect();
     try {
-
-        const result = await Todo.find({}).sort({createdAt: -1 });
+        const result = await Todo.find({}).sort({ createdAt: -1 });
 
         if (result) {
             return Response.json({
@@ -17,6 +18,7 @@ export async function GET(
             });
         }
 
+        res.setHeader('Cache-Control', 'no-store')
         return Response.json({
             success: false,
             message: "Failed to delete todo"
