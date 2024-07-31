@@ -37,7 +37,7 @@ function Home() {
   }
 
   async function fetchTodos() {
-    const response = await fetch('/api/get-todos')
+    const response = await fetch('/api/get-todos', { cache: 'no-cache' })
     const data = await response.json()
     setTodos(data.data)
   }
