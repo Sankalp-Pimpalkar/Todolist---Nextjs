@@ -1,9 +1,8 @@
 import dbconnect from "@/db/dbconnect";
 import Todo from "@/models/Todo";
-import { NextApiRequest } from "next";
 
 export async function GET(
-    req: NextApiRequest
+    req: Request
 ) {
     await dbconnect();
     try {
