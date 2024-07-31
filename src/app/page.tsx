@@ -32,7 +32,7 @@ function Home() {
       })
 
       setNewTodo('');
-      await fetchTodos()
+      fetchTodos()
     };
   }
 
@@ -52,7 +52,7 @@ function Home() {
         body: JSON.stringify({ todo_id })
       })
 
-      await fetchTodos()
+      fetchTodos()
     }
   }
 
@@ -66,7 +66,7 @@ function Home() {
         body: JSON.stringify({ todo_id, updatedTodo: { completed: true } })
       })
 
-      await fetchTodos()
+      fetchTodos()
     }
   }
 
@@ -80,7 +80,7 @@ function Home() {
         body: JSON.stringify({ todo_id, updatedTodo: { todo: task.trim() } })
       })
 
-      await fetchTodos()
+      fetchTodos()
     }
   }
 
