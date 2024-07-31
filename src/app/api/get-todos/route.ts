@@ -13,7 +13,7 @@ export async function GET(
         if (result) {
             return Response.json({
                 success: true,
-                message: "Todo deleted successfully",
+                message: "Todos fetched successfully",
                 data: result
             });
         }

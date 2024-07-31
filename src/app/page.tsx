@@ -50,7 +50,8 @@ function Home() {
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ todo_id })
+        body: JSON.stringify({ todo_id }),
+        cache: 'no-cache'
       })
 
       fetchTodos()
@@ -64,7 +65,8 @@ function Home() {
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ todo_id, updatedTodo: { completed: true } })
+        body: JSON.stringify({ todo_id, updatedTodo: { completed: true } }),
+        cache: 'no-cache'
       })
 
       fetchTodos()
@@ -78,7 +80,8 @@ function Home() {
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ todo_id, updatedTodo: { todo: task.trim() } })
+        body: JSON.stringify({ todo_id, updatedTodo: { todo: task.trim() } }),
+        cache: 'no-cache'
       })
 
       fetchTodos()
