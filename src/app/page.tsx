@@ -37,7 +37,7 @@ function Home() {
   }
 
   async function fetchTodos() {
-    const response = await fetch('/api/get-todos', { cache: 'no-cache' })
+    const response = await fetch('https://todolist-nextjs-nu.vercel.app/api/get-todos', { cache: 'no-cache' })
     const data = await response.json()
     console.log(data)
     setTodos(data.data)

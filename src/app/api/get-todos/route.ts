@@ -4,7 +4,6 @@ import { NextApiResponse } from "next";
 
 export async function GET(
     req: Request,
-    res: NextApiResponse
 ) {
     await dbconnect();
     try {
@@ -18,7 +17,6 @@ export async function GET(
             });
         }
 
-        res.setHeader('Cache-Control', 'no-store')
         return Response.json({
             success: false,
             message: "Failed to delete todo"
