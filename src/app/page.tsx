@@ -37,7 +37,7 @@ function Home() {
   }
 
   async function fetchTodos() {
-    const response = await fetch('https://todolist-nextjs-nu.vercel.app/api/get-todos', { cache: 'no-cache' })
+    const response = await fetch('/api/get-todos', { cache: 'no-store' })
     const data = await response.json()
     console.log(data)
     setTodos(data.data)
@@ -51,7 +51,7 @@ function Home() {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({ todo_id }),
-        cache: 'no-cache'
+        cache: 'no-store'
       })
 
       fetchTodos()
@@ -66,7 +66,7 @@ function Home() {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({ todo_id, updatedTodo: { completed: true } }),
-        cache: 'no-cache'
+        cache: 'no-store'
       })
 
       fetchTodos()
@@ -81,7 +81,7 @@ function Home() {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({ todo_id, updatedTodo: { todo: task.trim() } }),
-        cache: 'no-cache'
+        cache: 'no-store'
       })
 
       fetchTodos()
