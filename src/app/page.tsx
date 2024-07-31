@@ -23,69 +23,89 @@ function Home() {
     event.preventDefault();
 
     if (newTodo.trim()) {
-      await fetch(`/api/add-todo`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ todo: newTodo.trim() })
-      })
+      try {
+        await fetch(`/api/add-todo`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ todo: newTodo.trim() })
+        })
 
-      setNewTodo('');
+        setNewTodo('');
+      } catch (error) {
+        console.error('Error adding todo:', error)
+      }
     };
     fetchTodos()
   }
 
   async function fetchTodos() {
-    const response = await fetch('/api/get-todos', {
-      method: 'GET'
-    })
-    const data = await response.json()
-    console.log(data)
-    setTodos(data.data)
+    try {
+      const response = await fetch('/api/get-todos', {
+        method: 'GET'
+      })
+      const data = await response.json()
+      console.log(data)
+      setTodos(data.data)
+    } catch (error) {
+      console.error('Error fetching todos:', error)
+    }
   }
 
   async function deleteTodo(todo_id: string) {
     if (todo_id) {
-      await fetch(`/api/remove-todo`, {
-        method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ todo_id }),
-        cache: 'no-store'
-      })
+      try {
+        await fetch(`/api/remove-todo`, {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ todo_id }),
+          cache: 'no-store'
+        })
+      } catch (error) {
+        console.error('Error deleting todo:', error)
+      }
 
-      fetchTodos()
     }
+    fetchTodos()
   }
 
   async function completedTodo(todo_id: string) {
     if (todo_id) {
-      await fetch(`/api/update-todo`, {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ todo_id, updatedTodo: { completed: true } }),
-        cache: 'no-store'
-      })
+      try {
+        await fetch(`/api/update-todo`, {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ todo_id, updatedTodo: { completed: true } }),
+          cache: 'no-store'
+        })
 
+      } catch (error) {
+        console.error('Error updating todo:', error)
+      }
     }
     fetchTodos()
   }
 
   async function updateTask(todo_id: string, task: string) {
     if (task.trim()) {
-      await fetch(`/api/update-todo`, {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ todo_id, updatedTodo: { todo: task.trim() } }),
-        cache: 'no-store'
-      })
+      try {
+        await fetch(`/api/update-todo`, {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ todo_id, updatedTodo: { todo: task.trim() } }),
+          cache: 'no-store'
+        })
 
+      } catch (error) {
+        console.error('Error updating todo:', error)
+      }
     }
     fetchTodos()
   }
