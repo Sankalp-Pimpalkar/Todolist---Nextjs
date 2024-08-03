@@ -116,14 +116,24 @@ function Home() {
       const response = await fetch("/api/get-todos", {
         method: "GET",
       });
+
+      if (!response.ok) {
+        throw new Error(`Error fetching todos: ${response.statusText}`);
+      }
+
       const todosData = await response.json();
-      setTodos(todosData.data || []);
+      if (todosData.data) {
+        setTodos(todosData.data);
+      } else {
+        console.warn("No todos data found");
+      }
     } catch (error) {
       console.error("Error fetching todos:", error);
     } finally {
       setIsloadingTodos(false);
     }
   }
+
 
   useEffect(() => {
     FetchTodos();
