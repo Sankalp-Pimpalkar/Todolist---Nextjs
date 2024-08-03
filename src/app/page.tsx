@@ -56,7 +56,7 @@ function Home() {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ todo_id }),
+          body: JSON.stringify({ todo_id })
         });
 
         setTodos(todos.filter((todo) => todo._id !== todo_id))
@@ -115,6 +115,7 @@ function Home() {
     try {
       const response = await fetch("/api/get-todos", {
         method: "GET",
+        cache: "no-cache",
       });
 
       if (!response.ok) {
