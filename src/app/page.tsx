@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 "use client";
 import { Check, FilePenLine, LoaderCircle, Trash2, X } from "lucide-react";
 import React, { FormEvent, useEffect, useState } from "react";
@@ -21,20 +22,22 @@ function Home() {
   const [editTodoIndex, setEditTodoIndex] = useState<string | null>(null);
   const [updatedTask, setUpdatedTask] = useState("");
 
-  async function addTodo(event: FormEvent<HTMLFormElement>) {
+  async function AddTodo(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (newTodo.trim()) {
       setIsAdding(true);
       try {
-        await fetch(`/api/add-todo`, {
+        const newtodo = await fetch(`/api/add-todo`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({ todo: newTodo.trim() }),
         });
+        const newTodoData = await newtodo.json();
+
         setNewTodo("");
-        fetchTodos(); // Refresh the list after adding a new todo
+        setTodos([...todos, newTodoData.data])
       } catch (error) {
         console.error("Error adding todo:", error);
       } finally {
@@ -43,22 +46,8 @@ function Home() {
     }
   }
 
-  async function fetchTodos() {
-    setIsloadingTodos(true);
-    try {
-      const response = await fetch("/api/get-todos", {
-        method: "GET",
-      });
-      const data = await response.json();
-      setTodos(data.data);
-    } catch (error) {
-      console.error("Error fetching todos:", error);
-    } finally {
-      setIsloadingTodos(false);
-    }
-  }
 
-  async function deleteTodo(todo_id: string) {
+  async function DeleteTodo(todo_id: string) {
     if (todo_id) {
       setIsDeleting(true);
       try {
@@ -69,7 +58,8 @@ function Home() {
           },
           body: JSON.stringify({ todo_id }),
         });
-        fetchTodos(); // Refresh the list after deleting a todo
+
+        setTodos(todos.filter((todo) => todo._id !== todo_id))
       } catch (error) {
         console.error("Error deleting todo:", error);
       } finally {
@@ -78,7 +68,7 @@ function Home() {
     }
   }
 
-  async function completedTodo(todo_id: string) {
+  async function CompletedTodo(todo_id: string) {
     if (todo_id) {
       setIsUpdating(true);
       try {
@@ -89,7 +79,8 @@ function Home() {
           },
           body: JSON.stringify({ todo_id, updatedTodo: { completed: true } }),
         });
-        fetchTodos(); // Refresh the list after marking a todo as completed
+
+        setTodos(todos.map((todo) => todo._id === todo_id ? { ...todo, completed: true } : todo))
       } catch (error) {
         console.error("Error updating todo:", error);
       } finally {
@@ -98,7 +89,7 @@ function Home() {
     }
   }
 
-  async function updateTask(todo_id: string, task: string) {
+  async function UpdateTask(todo_id: string, task: string) {
     if (task.trim()) {
       setIsUpdating(true);
       try {
@@ -109,7 +100,8 @@ function Home() {
           },
           body: JSON.stringify({ todo_id, updatedTodo: { todo: task.trim() } }),
         });
-        fetchTodos(); // Refresh the list after updating a todo
+
+        setTodos(todos.map((todo) => todo._id === todo_id ? { ...todo, todo: task.trim() } : todo))
       } catch (error) {
         console.error("Error updating todo:", error);
       } finally {
@@ -118,14 +110,29 @@ function Home() {
     }
   }
 
+  async function FetchTodos() {
+    setIsloadingTodos(true);
+    try {
+      const response = await fetch("/api/get-todos", {
+        method: "GET",
+      });
+      const todosData = await response.json();
+      setTodos(todosData.data || []);
+    } catch (error) {
+      console.error("Error fetching todos:", error);
+    } finally {
+      setIsloadingTodos(false);
+    }
+  }
+
   useEffect(() => {
-    fetchTodos();
+    FetchTodos();
   }, []);
 
   return (
     <div className="w-full h-screen flex items-center justify-center bg-gray-100 sm:bg-gray-200">
       <div className="w-full max-w-2xl h-[40rem] p-5 border border-gray-200 bg-gray-100 rounded-md">
-        <form onSubmit={addTodo}>
+        <form onSubmit={AddTodo}>
           <h1 className="h1 text-gray-600 mb-5">Your Todolist</h1>
           <div className="flex relative">
             <input
@@ -135,6 +142,7 @@ function Home() {
               value={newTodo}
               onChange={(e) => setNewTodo(e.target.value)}
               disabled={isAdding}
+              autoFocus
             />
             <button
               type="submit"
@@ -162,7 +170,7 @@ function Home() {
                     <X
                       size={23}
                       className="text-red-500 cursor-pointer"
-                      onClick={() => completedTodo(todo._id)}
+                      onClick={() => CompletedTodo(todo._id)}
                     />
                   ) : (
                     <Check size={23} className="text-green-500 cursor-pointer" />
@@ -186,7 +194,7 @@ function Home() {
                     <div
                       className="bg-green-400 rounded-full cursor-pointer"
                       onClick={() => {
-                        updateTask(todo._id, updatedTask);
+                        UpdateTask(todo._id, updatedTask);
                         setEditTodoIndex(null);
                       }}
                     >
@@ -201,7 +209,7 @@ function Home() {
                   <Trash2
                     size={23}
                     className="text-red-500 cursor-pointer"
-                    onClick={() => deleteTodo(todo._id)}
+                    onClick={() => DeleteTodo(todo._id)}
                   />
                 </span>
               </li>

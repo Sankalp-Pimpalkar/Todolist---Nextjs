@@ -20,7 +20,8 @@ export async function DELETE(
 
         return Response.json({
             success: true,
-            message: "Todo deleted successfully"
+            message: "Todo deleted successfully",
+            data: result
         });
 
     } catch (error) {
