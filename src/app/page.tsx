@@ -112,27 +112,11 @@ function Home() {
 
   async function FetchTodos() {
     setIsloadingTodos(true);
-    try {
-      const response = await fetch("/api/get-todos", {
-        method: "GET",
-        cache: "no-cache",
-      });
-
-      if (!response.ok) {
-        throw new Error(`Error fetching todos: ${response.statusText}`);
-      }
-
-      const todosData = await response.json();
-      if (todosData.data) {
-        setTodos(todosData.data);
-      } else {
-        console.warn("No todos data found");
-      }
-    } catch (error) {
-      console.error("Error fetching todos:", error);
-    } finally {
-      setIsloadingTodos(false);
-    }
+    fetch("/api/get-todos")
+      .then(response => response.json())
+      .then(data => setTodos(data.data))
+      .catch(error => console.error("Error fetching todos:", error));
+    setIsloadingTodos(false);
   }
 
 
